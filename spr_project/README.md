@@ -1,6 +1,5 @@
-# Bikers Program
+# The healthiest patients in the world are the Bulgarians
 
-It is a program for bikers helping them to manage their routes.  
 TCP Server - Client implementation.
 
 ## Installation
