@@ -5,9 +5,11 @@ void addNewPatient(int socket_fd);
 //delete_route_implementation.c
 void sendPatientToMorgue(int socket_fd);
 
-//print_routes.case
+//print_routes.c
 void printAllPatients(int socket_fd);
 
+//print_death_patients.c
+void printAllDeathPatients(int socket_fd);
 //client_ctp_socket_implementation.c
 void printMenu();
 int createSocket();

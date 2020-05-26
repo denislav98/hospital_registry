@@ -49,7 +49,7 @@ void serverComunicationService(int socket_fd){
 		case 1: addNewPatient(socket_fd); break;
 		case 2: sendPatientToMorgue(socket_fd); break;
 		case 3: printAllPatients(socket_fd); break;
-		case 4:  break;
+		case 4: printAllDeathPatients(socket_fd); break;
 		case 5: printf("Program exit"); break;
 		default: printf("Option does not exist"); break;
 		}

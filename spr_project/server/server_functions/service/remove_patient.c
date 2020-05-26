@@ -49,13 +49,13 @@ void addPatientToMorgue(Patient deathPatient) {
 
 void addPatientToMorgueList(Patient deathPatient) {
 	DeathPatientsList* current = death_head;
-	while (current != NULL) {
-		if (comparePatients(current->patient, deathPatient) == 0) {
-			return;
-		}
+	//while (current != NULL) {
+	//	if (comparePatients(current->patient, deathPatient) == 0) {
+	//		return;
+	//	}
 
-		current = current->next;
-	}
+	//	current = current->next;
+	//}
 
 	DeathPatientsList* newNode = (DeathPatientsList*)malloc(sizeof(DeathPatientsList));
 
@@ -65,23 +65,50 @@ void addPatientToMorgueList(Patient deathPatient) {
 	strcpy(newNode->patient.egn, deathPatient.egn);
 	newNode->patient.egn[strlen(deathPatient.egn)] = '\0';
 
-	strcpy(newNode->patient.diagnosis, deathPatient.diagnosis);
-	newNode->patient.diagnosis[strlen(deathPatient.diagnosis)] = '\0';
-
 	newNode->next = death_head;
 	death_head = newNode;
 
-	printf("Patient : %s successfully added to list with deads \n ", deathPatient.name);
+	printf("Patient : %s successfully added to list with dead \n ", deathPatient.name);
+}
+
+int getPatientPrognosis(Patient deletePatient) {
+	MYSQL_RES* result;
+	MYSQL_ROW row;
+       
+	char selectQuery[500];
+
+        snprintf(selectQuery, sizeof selectQuery, "SELECT * FROM PATIENTS WHERE name='%s' AND egn='%s'", deletePatient.name, deletePatient.egn);
+
+	if ((mysql_query(mysql_connection, selectQuery))) {
+		printf("%s\n", mysql_error(mysql_connection));
+	}
+	result = mysql_use_result(mysql_connection);
+	row = mysql_fetch_row(result);
+	
+	strcpy(deletePatient.prognosis, row[5]);
+	deletePatient.prognosis[strlen(row[5])] = '\0';
+	
+	mysql_free_result(result);
+	
+	if (strcmp(deletePatient.prognosis, "living") == 0) {
+	  return -1;
+	}
+	return 0;
 }
 
 void sendPatientToMorgue(int client_connection_fd) {
 	Patient patient;
 	read(client_connection_fd, &patient, sizeof(Patient));
-	if (strcmp(patient.prognosis, "living") == 0) {
-	printf("Are you crazy, this patient will live, you can't send him to the morgue \n");
-		return;
+	if(-1 == getPatientPrognosis(patient)){
+	  printf("Are you crazy, this patient will live, you can't send him to the morgue \n");
+	  strcpy(patient.prognosis, "living");
+	  patient.prognosis[strlen(patient.prognosis)] = '\0';
+	  write(client_connection_fd, &patient, sizeof(Patient));
+	  return;
 	}
-        deletePatientFromDb(patient);
+	
+	deletePatientFromDb(patient);
 	deletePatientFromList(patient);
-	addPatientToMorgue(patient);	
+	addPatientToMorgue(patient);
+	write(client_connection_fd, &patient, sizeof(Patient));
 }

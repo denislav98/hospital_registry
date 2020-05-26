@@ -60,16 +60,15 @@ void clientComunicationService(int client_connection_fd){
 	char buffer[30];
 	int option;
 
-	loadPatientsFromDatabase();
-
+        loadDeathPatientsFromDatabase();
 	while(1) {
 		read(client_connection_fd, &option, sizeof(int));
 		switch(option)
 		{
 		case 1: addNewPatient(client_connection_fd); break;
 		case 2: sendPatientToMorgue(client_connection_fd); break;
-		case 3: printPatients(client_connection_fd); break;
-		//case 4: printAllDeathPatients(client_connection_fd); break;
+		case 3: loadPatientsFromDatabase();printPatients(client_connection_fd);break;
+		case 4: printAllDeathPatients(client_connection_fd);break;
 		case 5: printf("Program closed\n"); break;
 		default: printf("Option does not exist\n"); break;
 		}

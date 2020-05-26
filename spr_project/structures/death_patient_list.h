@@ -1,4 +1,4 @@
 typedef struct death_node {
-	Patient patient;
+	DeathPatient patient;
 	struct death_node* next;
 }DeathPatientsList;

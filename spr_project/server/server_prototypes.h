@@ -4,6 +4,8 @@ void connectToDatabase();
 //load_patients.c
 void loadPatientsFromDatabase();
 
+//load_death_patients.c
+void loadDeathPatientsFromDatabase();
 //service
 
 //add_patient.c

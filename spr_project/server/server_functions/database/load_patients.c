@@ -3,6 +3,7 @@ void loadPatientsFromDatabase(){
 	MYSQL_ROW row;
 
 	char* selectAllQuery = "SELECT * FROM PATIENTS";
+
 	head = NULL;
 
 	if((mysql_query(mysql_connection, selectAllQuery))) {
@@ -26,7 +27,7 @@ void loadPatientsFromDatabase(){
 
 		strcpy(newNode->patient.prognosis, row[5]);
 		newNode->patient.prognosis[strlen(row[5])] = '\0';
-
+printf("Patient : %s\n EGN: %s\n Age: %d\n Diagnosis: %s \n Prognosis: %s \n", newNode->patient.name, newNode->patient.egn, newNode->patient.age, newNode->patient.diagnosis, newNode->patient.prognosis);
 		newNode->next = head;
 		head = newNode;
 	}

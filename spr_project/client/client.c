@@ -11,10 +11,10 @@
 #define PORT 8080
 
 #include "../structures/patient.h"
-#include "../structures/delete_patient.h"
-
+#include "../structures/death_patient.h"
 #include "client_prototypes.h"
 
+#include "client_functions/print_death_patients.c"
 #include "client_functions/print_patients.c"
 #include "client_functions/add_patient.c"
 #include "client_functions/remove_patient.c"
